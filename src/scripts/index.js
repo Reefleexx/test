@@ -2,80 +2,81 @@ import '../styles/style.scss'
 import firebase from "firebase";
 import {firebaseConfig} from "./firebaseConfig";
 
-console.log('App had started')
 
-firebase.initializeApp(firebaseConfig)
-const database = firebase.database()
+// const PUSH_CHARS = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
+//
+// function decode(id) {
+//     id = id.substring(0,8);
+//     var timestamp = 0;
+//     for (let i=0; i < id.length; i++) {
+//         let c = id.charAt(i);
+//         timestamp = timestamp * 64 + PUSH_CHARS.indexOf(c);
+//     }
+//     return timestamp;
+// }
+//
+//
+// console.log('App had started')
+//
+// firebase.initializeApp(firebaseConfig)
+// const database = firebase.database()
+//
+// const form = document.getElementById('form');
+// const input = document.getElementById('input')
+// const input2 = document.getElementById('input2')
+// const nickName = document.getElementById('nickName')
+//
+// form.addEventListener('submit', async (e) => {
+//     e.preventDefault()
+//
+//     const nickNameValue = nickName.value
+//
+//     const key = database.ref(`users`).push().key
+//     await database.ref(`users/${nickNameValue}/key`).set(key)
+// })
+//
+// const deleteInput = document.getElementById('delete')
+// const deleteForm = document.getElementById('deleteForm')
+//
+// deleteForm.addEventListener('submit', (e) => {
+//     e.preventDefault()
+//
+//     database.ref(`users/`).on('value', async snap => {
+//         const allUsers = snap.val()
+//
+//         console.log(allUsers)
+//
+//         const last = {
+//             key: '',
+//             timeStamp: 0
+//         }
+//
+//         await snap.forEach(snapEl => {
+//             const element = snapEl.val().key
+//
+//             const timeStamp = decode(element)
+//
+//             if (last.timeStamp < timeStamp) {
+//                 last.key = element
+//                 last.timeStamp = timeStamp
+//             }
+//
+//         })
+//
+//         console.log(last)
+//     })
+//
+// })
+//
+//
+// let date = new Date().getTime()
+//
+// console.log(date)
 
-const form = document.getElementById('form');
-const input = document.getElementById('input')
-const input2 = document.getElementById('input2')
-const nickName = document.getElementById('nickName')
+const uploadForm = document.getElementById('uploadForm')
+const uploadInput = document.getElementById('uploadInput')
 
-console.log('start')
-
-form.addEventListener('submit', (e) => {
+uploadForm.addEventListener('submit', e => {
     e.preventDefault()
-
-    console.log('Event listener')
-
-    const nickNameValue = nickName.value
-    const inputValues = {
-        name: input.value,
-        surname: input2.value
-    }
-
-    input.value = ''
-    input2.value = ''
-    nickName.value = ''
-
-    database.ref('users/' + nickNameValue).set(inputValues)
-    database.ref('users/' + nickNameValue).on('value', (data) => console.log(data.val()))
+    console.log(uploadInput.files)
 })
-
-const deleteInput = document.getElementById('delete')
-const deleteForm = document.getElementById('deleteForm')
-
-deleteForm.addEventListener('submit', (e) => {
-    e.preventDefault()
-
-    const NickName = deleteInput.value
-    deleteInput.value = ''
-    database.ref('users/' + NickName).remove()
-})
-
-
-
-const names = {
-    'James': ['Jacob', 'Bill', 'Lucas'],
-    'Johny': ['David', 'Kyle', 'Lucas'],
-    'Peter': ['Lucy', 'Kyle']
-}
-
-const murders = [
-    'Lucas', 'Bill'
-]
-
-const killer = (names, murders) => {
-    // const killers = Object.keys(names).filter(name => {
-    //
-    //     const count = murders.filter(murder => {
-    //         if (names[name].includes(murder)) return murder
-    //     })
-    //
-    //     if (count.length > 1) {
-    //         return name
-    //     }
-    // })
-    // return killers
-
-    const killers = Object.keys(names).filter(name => {
-        const pers = names[name]
-        const newArray = new Set([...pers, ...murders])
-        if (pers.length + murders.length - newArray.size > 1) return name
-    })
-
-    return killers
-}
-
-console.log(killer(names, murders))
