@@ -1,6 +1,7 @@
 import '../styles/style.scss'
 import firebase from "firebase";
-import {firebaseConfig} from "./firebaseConfig";
+import {firebaseConfig, storage} from "./firebaseConfig";
+import axios from "axios";
 
 
 // const PUSH_CHARS = "-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz";
@@ -76,7 +77,45 @@ import {firebaseConfig} from "./firebaseConfig";
 const uploadForm = document.getElementById('uploadForm')
 const uploadInput = document.getElementById('uploadInput')
 
-uploadForm.addEventListener('submit', e => {
+const storageRef = storage.ref()
+const imgRef = storage.ref('images/some-image2')
+
+uploadForm.addEventListener('submit', async e => {
     e.preventDefault()
+
     console.log(uploadInput.files)
+
+    const imgUpload = imgRef.put(uploadInput.files[0])
+
+    const imgDom = document.getElementById('image')
+    const url = await storage.ref('images/some-image').getDownloadURL()
+
+    const response = await axios.get(url)
+
+    console.log(response)
+
+    // imgUpload.on('state_changed',
+    //     (snapshot) => {
+    //         let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //
+    //         console.log('Upload is ' + progress + '% done');
+    //
+    //         switch (snapshot.state) {
+    //             case firebase.storage.TaskState.PAUSED:
+    //                 console.log('Upload is paused');
+    //                 break;
+    //             case firebase.storage.TaskState.RUNNING:
+    //                 console.log('Upload is running');
+    //                 break;
+    //         }
+    //     },
+    //     (error) => {
+    //         // Handle unsuccessful uploads
+    //     },
+    //     () => {
+    //         imgUpload.snapshot.ref.getDownloadURL().then((downloadURL) => {
+    //             console.log('File available at', downloadURL);
+    //         });
+    //     }
+    // );
 })
